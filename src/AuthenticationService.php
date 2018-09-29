@@ -27,8 +27,8 @@ namespace App {
         )
         {
 
-            $this->profile = $profile ?? new ProfileDao();
-            $this->token = $token ?? new RsaTokenDao();
+            $this->profile = $profile ?: new ProfileDao();
+            $this->token = $token ?: new RsaTokenDao();
         }
 
         public function isValid($account, $password)
