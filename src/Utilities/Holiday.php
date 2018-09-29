@@ -25,11 +25,8 @@ class Holiday
 
     public function SayXmas()
     {
-        $check = [
-            '1225',
-            '1224'
-        ];
-        if (in_array($this->GetToday(),$check)){
+
+        if ($this->isXmas()){
             return 'Merry Xmax';
         }else {
             return 'Today is not Merry Xmax';
@@ -42,5 +39,13 @@ class Holiday
     protected function GetToday(): string
     {
         return $this->date->format('md');
+    }
+
+    protected function isXmas()
+    {
+        return in_array($this->GetToday(), [
+            '1225',
+            '1224'
+        ]);
     }
 }

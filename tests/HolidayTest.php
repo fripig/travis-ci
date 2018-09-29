@@ -14,19 +14,26 @@ use PHPUnit\Framework\TestCase;
 
 class HolidayTest extends TestCase
 {
-    protected $target;
+    protected $holiday;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->target  = new FakeHoliday();
+        $this->holiday  = new FakeHoliday();
     }
 
-    public function testSayXmas()
+    public function test_date_1225_is_Xmas()
     {
-        $this->SayXmasGiveDay('1225');
+        $this->SayXmasGiveDay(date('1225'));
+    }
 
-        $this->SayXmasGiveDay('1224');
+    public function test_date_1224_is_Xmas_too()
+    {
+        $this->SayXmasGiveDay(date('1224'));
 
+    }
+
+    public function test_date_1223_is_not_xmas()
+    {
         $this->SayXmasNotGiveDay('1223');
     }
 
@@ -36,22 +43,20 @@ class HolidayTest extends TestCase
     protected function SayXmasGiveDay($check): void
     {
 
-        $check = '1225';
-        $this->target->setDate($check);
+        $this->holiday->setDate($check);
 
         $this->assertEquals(
-            $this->target->SayXmas(),
+            $this->holiday->SayXmas(),
             'Merry Xmax');
 
     }
 
     protected function SayXmasNotGiveDay($check): void
     {
-        $check = '1223';
-        $this->target->setDate($check);
+        $this->holiday->setDate($check);
 
         $this->assertEquals(
-            $this->target->SayXmas(),
+            $this->holiday->SayXmas(),
             'Today is not Merry Xmax');
     }
 }
