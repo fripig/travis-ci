@@ -20,15 +20,21 @@ namespace App {
          * @var TokenInterfance
          */
         private $token;
+        /**
+         * @var Logger
+         */
+        private $logger;
 
         public function __construct(
             ProfileInterface $profile = null,
-            TokenInterfance $token = null
+            TokenInterfance $token = null,
+            Logger $log = null
         )
         {
 
             $this->profile = $profile ?: new ProfileDao();
             $this->token = $token ?: new RsaTokenDao();
+            $this->logger = $log ?: new Logger();
         }
 
         public function isValid($account, $password)
@@ -48,6 +54,7 @@ namespace App {
                 return true;
             }
             else {
+                $this->logger->save('user %s login failed ',[$account]);
                 return false;
             }
         }
