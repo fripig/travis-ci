@@ -41,9 +41,7 @@ class AuthenticationServiceTest extends TestCase
 
         $this->givenToken('000000');
 
-        $actual = $this->target->isValid('joey', '91000000');
-        //always failed
-        $this->assertTrue($actual);
+        $this->shouldBeValid('joey', '91000000');
     }
 
     protected function givenProfile($account, $password): void
@@ -58,25 +56,12 @@ class AuthenticationServiceTest extends TestCase
         $this->stubToken->shouldReceive('getRandom')
             ->andReturn($random);
     }
-}
 
-class StubProfile implements ProfileInterface
-{
-
-    public function getPassword($account)
+    protected function shouldBeValid($account, $password): void
     {
-        if ($account == 'joey') {
-            return '91';
-        }
-        return '';
+        $actual = $this->target->isValid($account, $password);
+        //always failed
+        $this->assertTrue($actual);
     }
 }
 
-class StubToken implements TokenInterfance
-{
-    public function getRandom($account)
-    {
-
-        return '000000';
-    }
-}
