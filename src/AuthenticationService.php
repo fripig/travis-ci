@@ -28,7 +28,7 @@ namespace App {
         public function __construct(
             ProfileInterface $profile = null,
             TokenInterfance $token = null,
-            Logger $log = null
+            LoggerInterface $log = null
         )
         {
 

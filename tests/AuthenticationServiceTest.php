@@ -10,6 +10,7 @@ namespace Tests;
 
 use App\AuthenticationService;
 use App\Logger;
+use App\LoggerInterface;
 use App\ProfileInterface;
 use App\TokenInterfance;
 use PHPUnit\Framework\TestCase;
@@ -19,26 +20,26 @@ use Mockery as m;
 class AuthenticationServiceTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
-    /** @test */
+
     private $stubProfile;
 
     private $stubToken;
 
     private $target;
 
-    private $logger;
+    private $mockLogger;
 
     protected function setUp()
     {
         $this->stubProfile = m::mock(ProfileInterface::class);
         $this->stubToken = m::mock(TokenInterfance::class);
-        $this->logger = m::mock(Logger::class);
+        $this->mockLogger = m::spy(LoggerInterface::class);
 
 
         $this->target = new AuthenticationService(
             $this->stubProfile,
             $this->stubToken,
-            $this->logger);
+            $this->mockLogger);
 
     }
 
@@ -61,10 +62,12 @@ class AuthenticationServiceTest extends TestCase
 
         $this->givenToken('000000');
 
-        $this->GiverLogger();
+
 
 
         $this->target->isValid('joey', 'wrong password');
+
+        $this->ShouldLog('user');
     }
 
     protected function givenProfile($account, $password): void
@@ -89,11 +92,11 @@ class AuthenticationServiceTest extends TestCase
         $this->assertTrue($actual);
     }
 
-    protected function GiverLogger(): void
+    protected function ShouldLog($check = ''): void
     {
-        $this->logger->shouldReceive('save')
-            ->withArgs(function ($string,$data) {
-                return strpos($string, 'user') !== false;
+        $this->mockLogger->shouldHaveReceived('save')
+            ->withArgs(function ($string,$data) use($check) {
+                return strpos($string, $check) !== false;
             })
             ->once();
     }

@@ -9,11 +9,16 @@
 namespace App;
 
 
-class Logger
+class Logger implements LoggerInterface
 {
 
-    public function save(string $string, array $array) :string
+    public function save(string $string, ?array $array = null) :string
     {
         return vsprintf($string,$array);
+    }
+
+    public function info(string $string, ?array $array)
+    {
+        // TODO: Implement info() method.
     }
 }
