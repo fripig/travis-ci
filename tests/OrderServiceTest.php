@@ -27,14 +27,16 @@ namespace Tests {
 
         public function setUp()
         {
-            $this->target = m::spy(OrderService::class)->makePartial();
+            $this->target = m::spy(OrderService::class)
+                ->makePartial();
             $this->target->shouldAllowMockingProtectedMethods();
 
 
 
             $this->spyBookDao = m::spy(BookDaoInterface::class);
 
-            $this->target->shouldReceive('getBookDao')
+            $this->target
+                ->shouldReceive('getBookDao')
                 ->andReturn($this->spyBookDao);
 
         }
@@ -73,14 +75,16 @@ namespace Tests {
                 $orders[] = $this->createBook($type);
             }
 
-            $this->target->shouldReceive('getOrders')->andReturn($orders);
+            $this->target->shouldReceive('getOrders')
+                ->andReturn($orders);
         }
 
         private function bookDaoShouldInsertTimes($times)
         {
-            $this->spyBookDao->shouldHaveReceived('insert')
+            $this->spyBookDao
+                ->shouldHaveReceived('insert')
                 ->with(m::on(function (Order $order) {
-                return $order->type == 'Book';
+                    return $order->type == 'Book';
             }))->times($times);
         }
     }
