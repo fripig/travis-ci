@@ -19,34 +19,89 @@ class OrderControllerTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
+    /**
+     * @var OrderController
+     */
+    private $orderController;
+
+    /**
+     * @var m\Mock
+     */
+    private $model;
+
+    public function setUp()
+    {
+        $this->model = m::mock(IOrderModel::class);
+
+
+        $this->model->shouldReceive('delete');
+
+        $this->orderController = new OrderController($this->model);
+    }
+
+
     /** @test */
     public function exist_order_should_update()
     {
-        // TODO
-        $model = m::mock(IOrderModel::class);
-        $model->shouldReceive('save')
-            ->withArgs(function($order,$insert,$update){
-
-            });
-        $orderController = new OrderController($model);
-        $orderController->save(new MyOrder(91, 100));
+        $this->GiveModelUpdate();
+        $order = $this->CreateOrder(91, 100);
+        $this->orderController->save($order);
+        $this->ShouldLog(sprintf('update order id:%s with %s successfully!', $order->id, $order->amount));
     }
 
     /** @test */
     public function no_exist_order_should_insert()
     {
-        // TODO
-        $model = m::mock(IOrderModel::class);
-        $orderController = new OrderController($model);
-        $orderController->save(new MyOrder(91, 100));
+        $this->GiveModelInsert();
+        $order = $this->CreateOrder(91, 100);
+        $this->orderController->save($order);
+        $this->ShouldLog(sprintf('insert order id:%s with %s successfully!', $order->id, $order->amount));
     }
 
     /** @test */
     public function verify_lambda_function_of_delete()
     {
-        // TODO
-        $model = m::mock(IOrderModel::class);
-        $orderController = new OrderController($model);
-        $orderController->deleteAmountMoreThan100();
+
+        $this->orderController->deleteAmountMoreThan100();
+    }
+
+    /**
+     * @param $model
+     */
+    protected function GiveModelInsert(): void
+    {
+        $this->model->shouldReceive('save')
+            ->andReturnUsing(function($order,$insert,$update){
+                $result = $insert($order);
+
+            })->once();
+    }
+
+    protected function GiveModelUpdate(): void
+    {
+        $this->model->shouldReceive('save')
+            ->andReturnUsing(function($order,$insert,$update){
+                $result = $update($order);
+
+            })->once();
+    }
+
+    /**
+     * @param $id
+     * @param $amount
+     * @return MyOrder
+     */
+    protected function CreateOrder($id, $amount): MyOrder
+    {
+        $order = new MyOrder($id, $amount);
+        return $order;
+    }
+
+    /**
+     * @param $order
+     */
+    protected function ShouldLog($log): void
+    {
+        $this->expectOutputString($log);
     }
 }

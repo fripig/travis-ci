@@ -102,7 +102,7 @@ class OrderModelTest extends TestCase
      * @param $expectedInvokedTimes
      * @return array
      */
-    private function createCallback($expectedInvokedTimes)
+    private function createCallback($expectedInvokedTimes) : callable 
     {
         $mockCallable = m::mock(stdClass::class);
         $mockCallable->shouldReceive('call')->times($expectedInvokedTimes);
