@@ -8,6 +8,8 @@
 
 namespace App;
 
+use App\Interfaces\IRepository;
+use App\Models\MyOrder;
 use Closure;
 
 class MyOrderModel implements IOrderModel

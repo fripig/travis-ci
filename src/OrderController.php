@@ -17,7 +17,7 @@ namespace App {
             $this->orderModel = $orderModel;
         }
 
-        public function save(MyOrder $order)
+        public function save(Models\MyOrder $order)
         {
             $this->orderModel->save($order, function ($order) {
                 $this->insertMessage($order);
@@ -44,24 +44,4 @@ namespace App {
         }
     }
 
-    class MyOrder
-    {
-        public $id;
-        public $amount;
-
-        public function __construct($id = null, $amount = null)
-        {
-            $this->id = $id;
-            $this->amount = $amount;
-        }
-    }
-
-    interface IRepository
-    {
-        public function isExist(MyOrder $order);
-
-        public function insert(MyOrder $order);
-
-        public function update(MyOrder $order);
-    }
 }

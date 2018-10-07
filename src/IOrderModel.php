@@ -8,6 +8,7 @@
 
 namespace App;
 
+use App\Models\MyOrder;
 use Closure;
 
 interface IOrderModel

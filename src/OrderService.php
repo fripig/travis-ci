@@ -17,7 +17,6 @@ namespace App {
         public function syncBookOrders()
         {
             $orders = $this->getOrders();
-            var_dump($orders);
 
             // only get orders of book
             $ordersOfBook = array_filter($orders, function ($order) {

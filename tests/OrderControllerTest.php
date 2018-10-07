@@ -9,7 +9,7 @@
 namespace Tests;
 
 use App\IOrderModel;
-use App\MyOrder;
+use App\Models\MyOrder;
 use App\OrderController;
 use PHPUnit\Framework\TestCase;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
@@ -24,6 +24,10 @@ class OrderControllerTest extends TestCase
     {
         // TODO
         $model = m::mock(IOrderModel::class);
+        $model->shouldReceive('save')
+            ->withArgs(function($order,$insert,$update){
+
+            });
         $orderController = new OrderController($model);
         $orderController->save(new MyOrder(91, 100));
     }
