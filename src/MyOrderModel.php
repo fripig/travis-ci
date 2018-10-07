@@ -24,7 +24,7 @@ class MyOrderModel implements IOrderModel
         $this->repository = $repository;
     }
 
-    public function save(MyOrder $order, Closure $insertCallback, Closure $updateCallback)
+    public function save(MyOrder $order, Callable  $insertCallback, Callable  $updateCallback)
     {
         if (!$this->repository->isExist($order)) {
             $this->repository->insert($order);
@@ -36,7 +36,7 @@ class MyOrderModel implements IOrderModel
         }
     }
 
-    public function delete(Closure $predicate)
+    public function delete(Callable  $predicate)
     {
         throw new Exception('Not implemented');
     }

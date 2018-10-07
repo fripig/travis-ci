@@ -11,10 +11,13 @@ namespace Tests;
 use App\Interfaces\IRepository;
 use App\Models\MyOrder;
 use App\MyOrderModel;
+use Closure;
 use const false;
 use PHPUnit\Framework\TestCase;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use Mockery as m;
+use stdClass;
+
 class OrderModelTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
@@ -40,14 +43,17 @@ class OrderModelTest extends TestCase
         $this->OrderShouldExist(false);
         $this->ShouldUpdateTimes(0, 0);
 
+
+
         $myOrderModel = new MyOrderModel($this->repository);
 
         $order = new MyOrder(1,'test');
 
+        $insertCallback = $this->createCallback(1);
+        $updateCallback = $this->createCallback(0);
         $myOrderModel->save($order,
-            function($order){
-            },
-            function($order){}
+            $insertCallback,
+            $updateCallback
             );
     }
 
@@ -65,10 +71,12 @@ class OrderModelTest extends TestCase
 
         $order = new MyOrder(1,'test');
 
+        $insertCallback = $this->createCallback(0);
+        $updateCallback = $this->createCallback(1);
+
         $myOrderModel->save($order,
-            function($order){
-            },
-            function($order){}
+            $insertCallback,
+            $updateCallback
         );
     }
 
@@ -88,5 +96,17 @@ class OrderModelTest extends TestCase
     {
         $this->repository->shouldReceive('update')
             ->times($times);
+    }
+
+    /**
+     * @param $expectedInvokedTimes
+     * @return array
+     */
+    private function createCallback($expectedInvokedTimes)
+    {
+        $mockCallable = m::mock(stdClass::class);
+        $mockCallable->shouldReceive('call')->times($expectedInvokedTimes);
+        $mockCallback = [$mockCallable, 'call'];
+        return $mockCallback;
     }
 }

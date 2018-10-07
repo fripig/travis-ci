@@ -13,7 +13,7 @@ use Closure;
 
 interface IOrderModel
 {
-    public function save(MyOrder $order, Closure $insertCallback, Closure $updateCallback);
+    public function save(MyOrder $order, Callable  $insertCallback, Callable  $updateCallback);
 
-    public function delete(Closure $predicate);
+    public function delete(Callable  $predicate);
 }
